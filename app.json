@@ -1,0 +1,17 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ],
+  "env": {
+    "PORT": "80"
+  },
+  "formation": {
+  },
+  "name": "realtime-todolist",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
