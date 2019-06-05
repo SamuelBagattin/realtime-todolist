@@ -1,6 +1,6 @@
 <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
     <div class="w3-display-topleft w3-padding-large w3-xlarge">
-        <img src="https://img.icons8.com/clouds/100/000000/checklist.png">
+        <img src="images/checklist.png" alt="checklist"/>
     </div>
     <div class="w3-display-topmiddle">
         <h1 class="w3-jumbo w3-animate-top">RealTime Todolist</h1>
@@ -15,12 +15,7 @@
             </form>
         </div>
         <div class="w3-container w3-content" id="containerTasks">
-            {{#each tasks}}
-                <div class="w3-panel w3-white w3-card w3-display-container task" id="{{@key}}">
-                    <span class="w3-display-topright w3-padding w3-hover-red delTask">X</span>
-                    <p class="w3-text-blue">{{this}}</p>
-                </div>
-            {{/each}}
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div>
     <div class="w3-display-bottomleft w3-padding-large">
@@ -41,16 +36,14 @@
         })
     };
 
-    let onclickDeleteAllSavedTasks = function() {
+    let onclickDeleteAllSavedTasks = function () {
         $('.delTask').click(function (event) {
             socket.emit('del_task', $(event.target).parent()[0].id);
         })
     };
 
-
-    onclickDeleteAllSavedTasks();
     socket.on('new_task', function (data) {
-        appendToList(data.value, data.id);
+        appendToList(data.title, data._id);
         onclickDelete(data.id);
     });
 
@@ -64,5 +57,20 @@
         input.blur();
         socket.emit('new_task', input.val());
         input.val('');
+    });
+
+    $.ajax({
+        type: 'GET',
+        url: 'ajax/findTasks',
+        success: function (resp) {
+            $('.lds-roller').hide();
+            resp.forEach((task) => {
+                appendToList(task.title, task._id);
+            });
+            onclickDeleteAllSavedTasks();
+        },
+        error: function () {
+            alert('error');
+        }
     });
 </script>
